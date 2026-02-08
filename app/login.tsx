@@ -17,17 +17,7 @@ import {
 
 const { width, height } = Dimensions.get('window');
 
-interface LoginPageProps {
-  onLoginSuccess?: (credentials: { userId: string; password: string }) => void;
-  onSignUpPress?: () => void;
-  onForgotPasswordPress?: () => void;
-}
-
-export default function LoginPage({
-  onLoginSuccess,
-  onSignUpPress,
-  onForgotPasswordPress,
-}: LoginPageProps) {
+export default function LoginScreen() {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -43,22 +33,16 @@ export default function LoginPage({
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
-      if (onLoginSuccess) {
-        onLoginSuccess({ userId, password });
-      }
+      Alert.alert('Success', 'Login successful!');
     }, 1500);
   };
 
   const handleForgotPassword = () => {
-    if (onForgotPasswordPress) {
-      onForgotPasswordPress();
-    }
+    Alert.alert('Forgot Password', 'Password reset feature coming soon');
   };
 
   const handleSignUp = () => {
-    if (onSignUpPress) {
-      onSignUpPress();
-    }
+    Alert.alert('Sign Up', 'Sign up feature coming soon');
   };
 
   return (
@@ -96,7 +80,6 @@ export default function LoginPage({
                   value={userId}
                   onChangeText={setUserId}
                   editable={!isLoading}
-                  accessibilityLabel="User ID input"
                 />
               </View>
             </View>
@@ -119,7 +102,6 @@ export default function LoginPage({
                   value={password}
                   onChangeText={setPassword}
                   editable={!isLoading}
-                  accessibilityLabel="Password input"
                 />
                 <TouchableOpacity
                   onPress={() => setIsPasswordVisible(!isPasswordVisible)}
