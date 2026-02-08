@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import {
-    Alert,
-    Dimensions,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Dimensions,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -25,6 +26,8 @@ export default function SignUp({ onCancel, onComplete }: SignUpProps) {
   // Step 1
   const [idType, setIdType] = useState<string>('');
   const [idDocument, setIdDocument] = useState<string>('');
+  const [idTypeModalVisible, setIdTypeModalVisible] = useState(false);
+  const idOptions = ['Passport', "Driver's License", 'National ID'];
 
   // Step 2
   const [firstName, setFirstName] = useState<string>('');
@@ -110,15 +113,38 @@ export default function SignUp({ onCancel, onComplete }: SignUpProps) {
             <Text style={styles.fieldLabel}>Select ID Type</Text>
             <TouchableOpacity
               style={styles.picker}
-              onPress={() => {
-                // simple cycle for demo selection
-                const options = ['Passport', "Driver's License", 'National ID'];
-                const nextIndex = options.indexOf(idType) >= 0 ? (options.indexOf(idType) + 1) % options.length : 0;
-                setIdType(options[nextIndex]);
-              }}
+              onPress={() => setIdTypeModalVisible(true)}
             >
               <Text style={styles.pickerText}>{idType || 'Choose your identification document'}</Text>
+              <Text style={styles.pickerIcon}>▼</Text>
             </TouchableOpacity>
+
+            <Modal
+                transparent={true}
+                visible={idTypeModalVisible}
+                onRequestClose={() => setIdTypeModalVisible(false)}
+            >
+                <TouchableOpacity
+                    style={styles.modalOverlay}
+                    activeOpacity={1}
+                    onPressOut={() => setIdTypeModalVisible(false)}
+                >
+                    <View style={styles.modalContent}>
+                        {idOptions.map((option) => (
+                            <TouchableOpacity
+                                key={option}
+                                style={styles.modalOption}
+                                onPress={() => {
+                                    setIdType(option);
+                                    setIdTypeModalVisible(false);
+                                }}
+                            >
+                                <Text style={styles.modalOptionText}>{option}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                </TouchableOpacity>
+            </Modal>
 
             <Text style={styles.fieldLabel}>Upload ID Document</Text>
             <TouchableOpacity
@@ -164,23 +190,27 @@ export default function SignUp({ onCancel, onComplete }: SignUpProps) {
             <Text style={styles.title}>Address Details</Text>
 
             <Text style={styles.fieldLabel}>Region</Text>
-            <TouchableOpacity style={styles.picker} onPress={() => setRegion('Region 1')}> 
+            <TouchableOpacity style={styles.picker} onPress={() => setRegion('Region 1')}>
               <Text style={styles.pickerText}>{region || 'Select Region'}</Text>
+              <Text style={styles.pickerIcon}>▼</Text>
             </TouchableOpacity>
 
             <Text style={styles.fieldLabel}>Province</Text>
-            <TouchableOpacity style={styles.picker} onPress={() => setProvince('Province 1')}> 
+            <TouchableOpacity style={styles.picker} onPress={() => setProvince('Province 1')}>
               <Text style={styles.pickerText}>{province || 'Select Province'}</Text>
+              <Text style={styles.pickerIcon}>▼</Text>
             </TouchableOpacity>
 
             <Text style={styles.fieldLabel}>City</Text>
-            <TouchableOpacity style={styles.picker} onPress={() => setCity('City 1')}> 
+            <TouchableOpacity style={styles.picker} onPress={() => setCity('City 1')}>
               <Text style={styles.pickerText}>{city || 'Select City'}</Text>
+              <Text style={styles.pickerIcon}>▼</Text>
             </TouchableOpacity>
 
             <Text style={styles.fieldLabel}>Barangay</Text>
-            <TouchableOpacity style={styles.picker} onPress={() => setBarangay('Barangay 1')}> 
+            <TouchableOpacity style={styles.picker} onPress={() => setBarangay('Barangay 1')}>
               <Text style={styles.pickerText}>{barangay || 'Select Barangay'}</Text>
+              <Text style={styles.pickerIcon}>▼</Text>
             </TouchableOpacity>
 
             <Text style={styles.fieldLabel}>Street/House Number</Text>
@@ -228,6 +258,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+    marginTop: 10,
   },
   content: {
     alignItems: 'center',
@@ -241,15 +272,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   backButton: {
-    padding: 8,
+    padding: 12,
   },
   backText: {
     color: '#001a4d',
-    fontWeight: '600',
+    fontWeight: '700',
   },
   stepLabel: {
     flex: 1,
     textAlign: 'center',
+    marginTop: 70,
+    paddingRight: 80,
     color: '#333',
     fontWeight: '600',
   },
@@ -257,6 +290,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 450,
     backgroundColor: '#fff',
+    marginTop: 20,
     padding: 18,
     borderRadius: 12,
     shadowColor: '#000',
@@ -277,24 +311,31 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   fieldLabel: {
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: '600',
-    marginTop: 10,
-    marginBottom: 6,
+    marginTop: 30,
+    marginBottom: 10,
     color: '#333',
   },
   picker: {
     backgroundColor: '#f9f9f9',
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 8,
+    borderRadius: 10,
     padding: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   pickerText: {
     color: '#666',
   },
+  pickerIcon: {
+    color: '#666',
+  },
   uploadBox: {
-    height: 120,
+    height: 250,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
@@ -318,7 +359,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 14,
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: 25,
   },
   primaryButtonText: {
     color: '#fff',
@@ -338,7 +379,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   selfieFrame: {
-    height: 220,
+    height: 300,
+    marginTop: 15,
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 12,
@@ -355,7 +397,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 12,
-    marginTop: 12,
+    marginTop: 18,
   },
   cancelOutline: {
     flex: 1,
@@ -381,5 +423,28 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: '#fff',
     fontWeight: '700',
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+      backgroundColor: '#fff',
+      borderRadius: 10,
+      padding: 10,
+      width: '80%',
+      maxHeight: '50%',
+  },
+  modalOption: {
+      paddingVertical: 15,
+      borderBottomWidth: 1,
+      borderBottomColor: '#eee',
+  },
+  modalOptionText: {
+      textAlign: 'center',
+      fontSize: 16,
+      color: '#333',
   },
 });

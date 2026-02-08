@@ -1,19 +1,23 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    Dimensions,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+
+// ✅ FIX: static image import (Metro-safe)
+import valtrackLogo from '../../assets/images/valtrackLogo.png';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,7 +44,6 @@ export default function LoginPage({
     }
 
     setIsLoading(true);
-    // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
       if (onLoginSuccess) {
@@ -72,11 +75,10 @@ export default function LoginPage({
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
         >
-          {/* Login Card */}
           <View style={styles.loginCard}>
             {/* Logo */}
             <View style={styles.logoContainer}>
-              <Text style={styles.logoText}>LOGO</Text>
+              <Image source={valtrackLogo} style={styles.logo} />
             </View>
 
             {/* User ID Input */}
@@ -135,7 +137,7 @@ export default function LoginPage({
               </View>
             </View>
 
-            {/* Forgot Password Link */}
+            {/* Forgot Password */}
             <TouchableOpacity
               onPress={handleForgotPassword}
               disabled={isLoading}
@@ -162,7 +164,7 @@ export default function LoginPage({
             </TouchableOpacity>
           </View>
 
-          {/* Sign Up Link */}
+          {/* Sign Up */}
           <View style={styles.signUpContainer}>
             <Text style={styles.signUpText}>Don't have an account? </Text>
             <TouchableOpacity
@@ -209,19 +211,19 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: height * 0.06,
+    marginBottom: 10,
   },
-  logoText: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#000',
+  logo: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
   },
   inputContainer: {
-    marginBottom: height * 0.04,
+    marginBottom: 20 ,
   },
   label: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
     color: '#333',
     marginBottom: 8,
   },
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     fontSize: 13,
     color: '#333',
-    fontWeight: '500',
+    fontWeight: '600',
   },
   loginButton: {
     backgroundColor: '#001a4d',
