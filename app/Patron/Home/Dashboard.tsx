@@ -18,6 +18,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Navigation from '../Library Visitor/Navigation';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
@@ -507,8 +508,10 @@ export default function Dashboard() {
         </View>
 
         {/* Bottom padding for scrollable view */}
-        <View style={{ height: 40 }} />
+        <View style={{ height: 120 }} />
       </ScrollView>
+      {/* Sticky Navigation */}
+      <Navigation activeTab="home" />
     </ThemedView>
   );
 }

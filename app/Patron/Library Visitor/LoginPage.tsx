@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
   Dimensions,
-  Image,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -13,11 +13,14 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 
-// ✅ FIX: static image import (Metro-safe)
-import valtrackLogo from '../../assets/images/valtrackLogo.png';
+// Test Account Credentials
+const TEST_CREDENTIALS = {
+  userId: '23-2970',
+  password: 'admin123',
+};
 
 const { width, height } = Dimensions.get('window');
 
@@ -32,32 +35,55 @@ export default function LoginPage({
   onSignUpPress,
   onForgotPasswordPress,
 }: LoginPageProps) {
+  const router = useRouter();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  /**
+   * Validates credentials and handles login
+   * Test Account: userId: 23-2970, password: admin123
+   */
   const handleLogin = () => {
+    // Validation: Check for empty fields
     if (!userId.trim() || !password.trim()) {
       Alert.alert('Validation Error', 'Please enter both User ID and password');
       return;
     }
 
     setIsLoading(true);
+
+    // Simulate API call with timeout
     setTimeout(() => {
       setIsLoading(false);
+
+      // Check if test credentials match
+      if (userId === TEST_CREDENTIALS.userId && password === TEST_CREDENTIALS.password) {
+        // Navigate to dashboard on successful test login
+        router.push('/Patron/Home/Dashboard');
+        return;
+      }
+
+      // Callback for custom login handling (can be used for real API integration later)
       if (onLoginSuccess) {
         onLoginSuccess({ userId, password });
       }
     }, 1500);
   };
 
+  /**
+   * Handles forgot password action
+   */
   const handleForgotPassword = () => {
     if (onForgotPasswordPress) {
       onForgotPasswordPress();
     }
   };
 
+  /**
+   * Handles sign up navigation
+   */
   const handleSignUp = () => {
     if (onSignUpPress) {
       onSignUpPress();
@@ -76,9 +102,10 @@ export default function LoginPage({
           scrollEventThrottle={16}
         >
           <View style={styles.loginCard}>
-            {/* Logo */}
+            {/* App Title */}
             <View style={styles.logoContainer}>
-              <Image source={valtrackLogo} style={styles.logo} />
+              <Text style={styles.appTitle}>Val-Track</Text>
+              <Text style={styles.appSubtitle}>Library Management</Text>
             </View>
 
             {/* User ID Input */}
@@ -211,12 +238,18 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 30,
   },
-  logo: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
+  appTitle: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#001a4d',
+    marginBottom: 8,
+  },
+  appSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
   },
   inputContainer: {
     marginBottom: 20 ,

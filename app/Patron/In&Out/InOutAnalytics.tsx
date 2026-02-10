@@ -22,6 +22,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Navigation from '../Library Visitor/Navigation';
 import { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
@@ -474,71 +475,11 @@ export default function InOutAnalytics() {
         </View>
 
         {/* Bottom spacing for navigation */}
-        <View style={{ height: 80 }} />
+        <View style={{ height: 120 }} />
       </ScrollView>
 
-      {/* Fixed Bottom Navigation */}
-      <View style={styles.bottomNavigation}>
-        <TouchableOpacity
-          style={styles.navItem}
-          accessible={true}
-          accessibilityRole="tab"
-          accessibilityLabel="Home"
-        >
-          <MaterialCommunityIcons
-            name="home"
-            size={24}
-            color="#999"
-          />
-          <ThemedText
-            style={styles.navLabel}
-            lightColor="#999"
-            darkColor="#666"
-          >
-            Home
-          </ThemedText>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.navItem}
-          accessible={true}
-          accessibilityRole="tab"
-          accessibilityLabel="In/Out (current tab)"
-        >
-          <MaterialCommunityIcons
-            name="login"
-            size={24}
-            color="#007AFF"
-          />
-          <ThemedText
-            style={[styles.navLabel, { color: '#007AFF' }]}
-            lightColor="#007AFF"
-            darkColor="#007AFF"
-          >
-            In/Out
-          </ThemedText>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.navItem}
-          accessible={true}
-          accessibilityRole="tab"
-          accessibilityLabel="Profile"
-        >
-          <MaterialCommunityIcons
-            name="account"
-            size={24}
-            color="#999"
-          />
-          <ThemedText
-            style={styles.navLabel}
-            lightColor="#999"
-            darkColor="#666"
-          >
-            Profile
-          </ThemedText>
-        </TouchableOpacity>
-      </View>
+      {/* Sticky Navigation */}
+      <Navigation activeTab="inout" />
     </ThemedView>
   );
 }

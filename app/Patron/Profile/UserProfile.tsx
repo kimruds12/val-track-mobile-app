@@ -18,6 +18,7 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import Navigation from '../Library Visitor/Navigation';
 import React, { useState } from 'react';
 import {
   AccessibilityInfo,
@@ -425,15 +426,10 @@ export default function UserProfile() {
   const router = useRouter();
 
   // State management
-<<<<<<< HEAD
-  const [apiKey, setApiKey] = useState('api_hidden');
-=======
-  const [apiKey, setApiKey] = useState(process.env.EXPO_PUBLIC_API_KEY || 'hidden');
->>>>>>> 425a2cf (fix: escape unescaped apostrophes and remove exposed API key)
+  const [apiKey, setApiKey] = useState(process.env.EXPO_PUBLIC_API_KEY || 'api_hidden');
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [notifications, setNotifications] = useState(3);
-  const [activeTab, setActiveTab] = useState('profile');
 
   // Handle notification press
   const handleNotificationPress = () => {
@@ -485,22 +481,6 @@ export default function UserProfile() {
         },
       },
     ]);
-  };
-
-  // Handle bottom navigation press
-  const handleNavPress = (tab: string) => {
-    setActiveTab(tab);
-    switch (tab) {
-      case 'home':
-        router.push('/Patron/Library Visitor/Home/Dashboard');
-        break;
-      case 'inout':
-        router.push('/Patron/Library Visitor/In&Out/In&OutAnalytics');
-        break;
-      case 'profile':
-        // Already on profile
-        break;
-    }
   };
 
   return (
@@ -669,85 +649,8 @@ export default function UserProfile() {
         </View>
       </ScrollView>
 
-      {/* Bottom Navigation - Fixed */}
-      <View
-        style={[
-          styles.bottomNav,
-          {
-            backgroundColor: isDark ? '#111827' : '#fff',
-            borderTopColor: isDark ? '#374151' : '#e5e7eb',
-          },
-        ]}
-      >
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => handleNavPress('home')}
-          activeOpacity={0.7}
-        >
-          <MaterialIcons
-            name="home"
-            size={24}
-            color={activeTab === 'home' ? '#001a4d' : '#999'}
-          />
-          <Text
-            style={[
-              styles.navLabel,
-              {
-                color: activeTab === 'home' ? '#001a4d' : '#999',
-                fontWeight: activeTab === 'home' ? '700' : '600',
-              },
-            ]}
-          >
-            Home
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => handleNavPress('inout')}
-          activeOpacity={0.7}
-        >
-          <MaterialIcons
-            name="compare-arrows"
-            size={24}
-            color={activeTab === 'inout' ? '#001a4d' : '#999'}
-          />
-          <Text
-            style={[
-              styles.navLabel,
-              {
-                color: activeTab === 'inout' ? '#001a4d' : '#999',
-                fontWeight: activeTab === 'inout' ? '700' : '600',
-              },
-            ]}
-          >
-            In/Out
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => handleNavPress('profile')}
-          activeOpacity={0.7}
-        >
-          <MaterialIcons
-            name="person"
-            size={24}
-            color={activeTab === 'profile' ? '#001a4d' : '#999'}
-          />
-          <Text
-            style={[
-              styles.navLabel,
-              {
-                color: activeTab === 'profile' ? '#001a4d' : '#999',
-                fontWeight: activeTab === 'profile' ? '700' : '600',
-              },
-            ]}
-          >
-            Profile
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {/* Sticky Navigation */}
+      <Navigation activeTab="profile" />
 
       {/* Logout Confirmation Modal */}
       <LogoutModal
@@ -814,7 +717,7 @@ const styles = StyleSheet.create({
   // Scroll Content
   scrollContent: {
     paddingVertical: 16,
-    paddingBottom: 80,
+    paddingBottom: 120,
   },
 
   // Section
@@ -1095,30 +998,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: '700',
-  },
-
-  // Bottom Navigation
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  navItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
-    flex: 1,
-  },
-  navLabel: {
-    fontSize: 12,
-    marginTop: 4,
   },
 });
