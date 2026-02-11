@@ -18,10 +18,15 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Dimensions, Image, ScrollView, StyleSheet, View } from 'react-native';
 import Navigation from '../Library Visitor/Navigation';
-import { ScrollView, StyleSheet, View } from 'react-native';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
+
+const { width } = Dimensions.get('window');
+
+// Logo image
+const valtrackLogo = require('../../assets/images/valtrackLogo.png');
 
 /**
  * StatCard Component
@@ -212,12 +217,7 @@ export default function Dashboard() {
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <ThemedText type="title" style={styles.appName}>
-            Val-Track
-          </ThemedText>
-          <ThemedText style={styles.subtitle} lightColor="#666" darkColor="#999">
-            Library Management
-          </ThemedText>
+          <Image source={valtrackLogo} style={styles.logo} resizeMode="contain" />
         </View>
         <View style={styles.notificationBadge}>
           <MaterialCommunityIcons
@@ -539,8 +539,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    marginTop: 50,
     paddingHorizontal: 16,
-    paddingVertical: 20,
+    paddingVertical: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -553,8 +554,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
   },
+  logo: {
+    width: 100,
+    height: 60,
+  },
   notificationBadge: {
     position: 'relative',
+    marginTop: 10,
+    marginRight: 8,
   },
   badge: {
     position: 'absolute',

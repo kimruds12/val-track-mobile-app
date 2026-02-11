@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
+  Image,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -15,6 +16,9 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+
+// Import logo image (use require for RN bundler)
+const valtrackLogo = require('../../assets/images/valtrackLogo.png');
 
 // Test Account Credentials
 const TEST_CREDENTIALS = {
@@ -44,6 +48,8 @@ export default function LoginPage({
   /**
    * Validates credentials and handles login
    * Test Account: userId: 23-2970, password: admin123
+   * On successful login, navigates to Dashboard where Navigation component
+   * manages all subsequent screen transitions (Home, In/Out, Profile)
    */
   const handleLogin = () => {
     // Validation: Check for empty fields
@@ -59,13 +65,27 @@ export default function LoginPage({
       setIsLoading(false);
 
       // Check if test credentials match
-      if (userId === TEST_CREDENTIALS.userId && password === TEST_CREDENTIALS.password) {
-        // Navigate to dashboard on successful test login
-        router.push('/Patron/Home/Dashboard');
+      const isValidCredentials =
+        userId === TEST_CREDENTIALS.userId && password === TEST_CREDENTIALS.password;
+
+      if (isValidCredentials) {
+        // Clear inputs on successful login
+        setUserId('');
+        setPassword('');
+
+        // Navigate to Dashboard home screen
+        // Navigation component will handle all screen transitions from here
+        router.replace('/Patron/Home/Dashboard');
         return;
       }
 
-      // Callback for custom login handling (can be used for real API integration later)
+      // Invalid credentials
+      Alert.alert(
+        'Login Failed',
+        'Invalid User ID or password. Please try again.\n\nTest Account: 23-2970 / admin123'
+      );
+
+      // Optional callback for custom login handling (can be used for real API integration later)
       if (onLoginSuccess) {
         onLoginSuccess({ userId, password });
       }
@@ -102,10 +122,13 @@ export default function LoginPage({
           scrollEventThrottle={16}
         >
           <View style={styles.loginCard}>
-            {/* App Title */}
+            {/* App Logo */}
             <View style={styles.logoContainer}>
-              <Text style={styles.appTitle}>Val-Track</Text>
-              <Text style={styles.appSubtitle}>Library Management</Text>
+              <Image
+                source={valtrackLogo}
+                style={styles.logo}
+                resizeMode="contain"
+              />
             </View>
 
             {/* User ID Input */}
@@ -238,18 +261,13 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 30,
+    height: 120,
   },
-  appTitle: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#001a4d',
-    marginBottom: 8,
-  },
-  appSubtitle: {
-    fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
+  logo: {
+    width: 200,
+    height: 200,
   },
   inputContainer: {
     marginBottom: 20 ,

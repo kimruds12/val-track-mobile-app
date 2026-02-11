@@ -18,12 +18,12 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import Navigation from '../Library Visitor/Navigation';
 import React, { useState } from 'react';
 import {
   AccessibilityInfo,
   Alert,
   Dimensions,
+  Image,
   Modal,
   ScrollView,
   StyleSheet,
@@ -32,8 +32,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Navigation from '../Library Visitor/Navigation';
 
 const { width: screenWidth } = Dimensions.get('window');
+const valtrackLogo = require('../../assets/images/valtrackLogo.png');
 
 /**
  * ProfileHeader Component
@@ -496,10 +498,7 @@ export default function UserProfile() {
         ]}
       >
         <View>
-          <Text style={[styles.appName, { color: colors.tint }]}>Val-Track</Text>
-          <Text style={[styles.appSubtitle, { color: isDark ? '#9ca3af' : '#6b7280' }]}>
-            My Profile
-          </Text>
+          <Image source={valtrackLogo} style={styles.logo} resizeMode="contain" />
         </View>
 
         {/* Notification Icon */}
@@ -676,27 +675,30 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    marginTop: 50,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 5,
     borderBottomWidth: 1,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    borderBottomColor: '#f0f0f0',
   },
   appName: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
-    letterSpacing: 0.5,
+    marginBottom: 4,
   },
-  appSubtitle: {
-    fontSize: 12,
-    marginTop: 2,
+  subtitle: {
+    fontSize: 14,
+    fontWeight: '400',
+  },
+  logo: {
+    width: 100,
+    height: 60,
   },
   notificationContainer: {
     position: 'relative',
+    marginTop: 10,
+    marginRight: 8,
   },
   notificationBadge: {
     position: 'absolute',

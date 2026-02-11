@@ -22,11 +22,14 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Navigation from '../Library Visitor/Navigation';
 import { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import Navigation from '../Library Visitor/Navigation';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
+
+const { width } = Dimensions.get('window');
+const valtrackLogo = require('../../assets/images/valtrackLogo.png');
 
 /**
  * StatusIndicator Component
@@ -51,29 +54,33 @@ function StatusIndicator({ label, isActive }: { label: string; isActive: boolean
 /**
  * ActionButton Component
  * Large primary button for check in/out actions
+ * Supports disabled state for button management
  */
 function ActionButton({
   icon,
   label,
   onPress,
   variant = 'primary',
+  isDisabled = false,
 }: {
   icon: IconName;
   label: string;
   onPress: () => void;
   variant?: 'primary' | 'danger';
+  isDisabled?: boolean;
 }) {
   const backgroundColor = variant === 'danger' ? '#EF4444' : '#10B981';
-  const secondaryColor = variant === 'danger' ? '#FEE2E2' : '#ECFDF5';
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      activeOpacity={0.8}
-      style={[styles.actionButton, { backgroundColor }]}
+      disabled={isDisabled}
+      activeOpacity={isDisabled ? 0.5 : 0.8}
+      style={[styles.actionButton, { backgroundColor, opacity: isDisabled ? 0.5 : 1 }]}
       accessible={true}
       accessibilityRole="button"
       accessibilityLabel={label}
+      accessibilityState={{ disabled: isDisabled }}
     >
       <MaterialCommunityIcons name={icon} size={48} color="#fff" />
       <ThemedText
@@ -378,23 +385,64 @@ function WeeklyActiveUsersChart() {
  */
 export default function InOutAnalytics() {
   const [isCheckedOut, setIsCheckedOut] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const textColor = useThemeColor({}, 'text');
 
-  // Handle check in action
+  /**
+   * Handle check in action with confirmation
+   * Shows dialog, then updates state on confirm
+   */
   const handleCheckIn = () => {
+    if (isProcessing) return;
+    
+    setIsProcessing(true);
     Alert.alert(
-      'Check In Successful',
-      'You are now checked in to the library.',
-      [{ text: 'OK', onPress: () => setIsCheckedOut(false) }]
+      'Confirm Check In',
+      'Are you sure you want to check in to the library?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => setIsProcessing(false),
+          style: 'cancel',
+        },
+        {
+          text: 'Check In',
+          onPress: () => {
+            setIsCheckedOut(false);
+            setIsProcessing(false);
+            Alert.alert('Success', 'You are now checked in to the library.');
+          },
+        },
+      ]
     );
   };
 
-  // Handle check out action
+  /**
+   * Handle check out action with confirmation
+   * Shows dialog, then updates state on confirm
+   */
   const handleCheckOut = () => {
+    if (isProcessing) return;
+    
+    setIsProcessing(true);
     Alert.alert(
-      'Check Out Successful',
-      'You are now checked out from the library.',
-      [{ text: 'OK', onPress: () => setIsCheckedOut(true) }]
+      'Confirm Check Out',
+      'Are you sure you want to check out from the library?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => setIsProcessing(false),
+          style: 'cancel',
+        },
+        {
+          text: 'Check Out',
+          onPress: () => {
+            setIsCheckedOut(true);
+            setIsProcessing(false);
+            Alert.alert('Success', 'You are now checked out from the library.');
+          },
+        },
+      ]
     );
   };
 
@@ -403,12 +451,7 @@ export default function InOutAnalytics() {
       {/* Sticky Header */}
       <View style={styles.header}>
         <View>
-          <ThemedText type="title" style={styles.appName}>
-            Val-Track
-          </ThemedText>
-          <ThemedText style={styles.subtitle} lightColor="#666" darkColor="#999">
-            In/Out Management
-          </ThemedText>
+          <Image source={valtrackLogo} style={styles.logo} resizeMode="contain" />
         </View>
         <View style={styles.notificationBadge}>
           <MaterialCommunityIcons
@@ -449,12 +492,14 @@ export default function InOutAnalytics() {
               label="Check In"
               onPress={handleCheckIn}
               variant="primary"
+              isDisabled={!isCheckedOut || isProcessing}
             />
             <ActionButton
               icon="logout"
               label="Check Out"
               onPress={handleCheckOut}
               variant="danger"
+              isDisabled={isCheckedOut || isProcessing}
             />
           </View>
         </View>
@@ -508,8 +553,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    marginTop: 50,
     paddingHorizontal: 16,
-    paddingVertical: 20,
+    paddingVertical: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -522,8 +568,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
   },
+  logo: {
+    width: 100,
+    height: 60,
+  },
   notificationBadge: {
     position: 'relative',
+    marginTop: 10,
+    marginRight: 8,
   },
   badge: {
     position: 'absolute',
@@ -769,6 +821,7 @@ const styles = StyleSheet.create({
   /* Weekly Active Users Bar Chart */
   barChartContainer: {
     gap: 16,
+    marginTop: 30,
   },
   barsRow: {
     flexDirection: 'row',
