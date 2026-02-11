@@ -27,7 +27,18 @@ export default function SignUp({ onCancel, onComplete }: SignUpProps) {
   const [idType, setIdType] = useState<string>('');
   const [idDocument, setIdDocument] = useState<string>('');
   const [idTypeModalVisible, setIdTypeModalVisible] = useState(false);
-  const idOptions = ['Passport', "Driver's License", 'National ID'];
+  const idOptions = [
+    'Passport',
+    'National ID',
+    "Driver's License",
+    'UMID',
+    "Voter's ID",
+    'Senior Citizen ID',
+    'PWD ID',
+    'PRC ID',
+    'Student ID',
+    'Others',
+  ];
 
   // Step 2
   const [firstName, setFirstName] = useState<string>('');
@@ -120,30 +131,30 @@ export default function SignUp({ onCancel, onComplete }: SignUpProps) {
             </TouchableOpacity>
 
             <Modal
-                transparent={true}
-                visible={idTypeModalVisible}
-                onRequestClose={() => setIdTypeModalVisible(false)}
+              transparent={true}
+              visible={idTypeModalVisible}
+              onRequestClose={() => setIdTypeModalVisible(false)}
             >
-                <TouchableOpacity
-                    style={styles.modalOverlay}
-                    activeOpacity={1}
-                    onPressOut={() => setIdTypeModalVisible(false)}
-                >
-                    <View style={styles.modalContent}>
-                        {idOptions.map((option) => (
-                            <TouchableOpacity
-                                key={option}
-                                style={styles.modalOption}
-                                onPress={() => {
-                                    setIdType(option);
-                                    setIdTypeModalVisible(false);
-                                }}
-                            >
-                                <Text style={styles.modalOptionText}>{option}</Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalOverlay}
+                activeOpacity={1}
+                onPressOut={() => setIdTypeModalVisible(false)}
+              >
+                <View style={styles.modalContent}>
+                  {idOptions.map((option) => (
+                    <TouchableOpacity
+                      key={option}
+                      style={styles.modalOption}
+                      onPress={() => {
+                        setIdType(option);
+                        setIdTypeModalVisible(false);
+                      }}
+                    >
+                      <Text style={styles.modalOptionText}>{option}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </TouchableOpacity>
             </Modal>
 
             <Text style={styles.fieldLabel}>Upload ID Document</Text>
@@ -431,20 +442,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
-      backgroundColor: '#fff',
-      borderRadius: 10,
-      padding: 10,
-      width: '80%',
-      maxHeight: '50%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
+    width: '80%',
+    maxHeight: '50%',
   },
   modalOption: {
-      paddingVertical: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: '#eee',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
   },
   modalOptionText: {
-      textAlign: 'center',
-      fontSize: 16,
-      color: '#333',
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#333',
   },
 });
