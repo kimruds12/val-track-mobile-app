@@ -14,8 +14,8 @@
  */
 
 import { MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { usePathname, useRouter } from 'expo-router';
+import React, { useMemo } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -36,13 +36,20 @@ interface NavigationProps {
  */
 export default function Navigation({ activeTab = 'home' }: NavigationProps) {
   const router = useRouter();
-  const [active, setActive] = useState(activeTab);
+  const pathname = usePathname();
+  
+  // Determine active tab based on current pathname
+  const active = useMemo(() => {
+    if (pathname.includes('Dashboard')) return 'home';
+    if (pathname.includes('InOutAnalytics')) return 'inout';
+    if (pathname.includes('UserProfile')) return 'profile';
+    return activeTab || 'home';
+  }, [pathname, activeTab]);
 
   /**
    * Navigate to Home (Dashboard)
    */
   const handleHomePress = () => {
-    setActive('home');
     router.push('/Patron/Home/Dashboard');
   };
 
@@ -50,7 +57,6 @@ export default function Navigation({ activeTab = 'home' }: NavigationProps) {
    * Navigate to In/Out (Analytics)
    */
   const handleInOutPress = () => {
-    setActive('inout');
     router.push('/Patron/In&Out/InOutAnalytics');
   };
 
@@ -58,7 +64,6 @@ export default function Navigation({ activeTab = 'home' }: NavigationProps) {
    * Navigate to Profile (User Profile)
    */
   const handleProfilePress = () => {
-    setActive('profile');
     router.push('/Patron/Profile/UserProfile');
   };
 

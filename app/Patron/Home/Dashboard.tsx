@@ -15,10 +15,11 @@
  */
 
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Dimensions, Image, ScrollView, StyleSheet, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import OverallHeader from "../AllHeader/OverallHeader";
 import Navigation from '../Library Visitor/Navigation';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
@@ -213,29 +214,10 @@ export default function Dashboard() {
   const backgroundColor = useThemeColor({}, 'background');
 
   return (
-    <ThemedView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View>
-          <Image source={valtrackLogo} style={styles.logo} resizeMode="contain" />
-        </View>
-        <View style={styles.notificationBadge}>
-          <MaterialCommunityIcons
-            name="bell"
-            size={24}
-            color={textColor}
-          />
-          <View style={styles.badge}>
-            <ThemedText
-              style={styles.badgeText}
-              lightColor="#fff"
-              darkColor="#fff"
-            >
-              3
-            </ThemedText>
-          </View>
-        </View>
-      </View>
+    <View style={styles.container}>
+      <StatusBar style="dark" />
+      {/* OverallHeader is displayed here - no duplicate header */}
+      <OverallHeader />
 
       <ScrollView
         style={styles.scrollView}
@@ -254,16 +236,16 @@ export default function Dashboard() {
               label="Active Users Today"
               value="250"
               description="Current active visitors"
-              accentColor="#007AFF"
-              lightIconBg="#E3F2FD"
+              accentColor="#10B981"
+              lightIconBg="#ECFDF5"
             />
             <StatCard
               icon="account-plus"
               label="Total Created Users"
               value="1,280"
               description="Cumulative registered users"
-              accentColor="#10B981"
-              lightIconBg="#ECFDF5"
+              accentColor="#00104A"
+              lightIconBg="#E3F2FD"
             />
           </View>
         </View>
@@ -275,11 +257,10 @@ export default function Dashboard() {
           </ThemedText>
 
           <View style={styles.capacityContainer}>
-            <FloorCapacityBar floor="Floor 1" current={45} total={50} color="#007AFF" />
-            <FloorCapacityBar floor="Floor 2" current={78} total={100} color="#9333EA" />
-            <FloorCapacityBar floor="Floor 3" current={92} total={120} color="#06B6D4" />
-            <FloorCapacityBar floor="Floor 4" current={34} total={60} color="#EC4899" />
-            <FloorCapacityBar floor="Floor 5" current={67} total={80} color="#F59E0B" />
+            <FloorCapacityBar floor="Floor 1" current={45} total={50} color="#00104A" />
+            <FloorCapacityBar floor="Floor 2" current={78} total={100} color="#00104A" />
+            <FloorCapacityBar floor="Floor 3" current={92} total={120} color="#00104A" />
+            <FloorCapacityBar floor="Floor 4" current={34} total={60} color="#00104A" />
           </View>
         </View>
 
@@ -288,14 +269,14 @@ export default function Dashboard() {
           <InfoCard
             icon="clock-outline"
             title="Opening Hours"
-            borderLeftColor="#007AFF"
+            borderLeftColor="#56CBF9"
           >
             <View style={styles.hoursContent}>
               <View style={styles.hourRow}>
                 <ThemedText
                   style={styles.dayLabel}
-                  lightColor="#11181C"
-                  darkColor="#ECEDEE"
+                  lightColor="#232323"
+                  darkColor="#F8FAFC"
                 >
                   Monday - Friday
                 </ThemedText>
@@ -342,7 +323,6 @@ export default function Dashboard() {
                 lightColor="#999"
                 darkColor="#666"
               >
-                Closing hours may vary. Please check our website for updates.
               </ThemedText>
             </View>
           </InfoCard>
@@ -357,12 +337,6 @@ export default function Dashboard() {
           >
             <View style={styles.branchContent}>
               <View style={styles.branchItem}>
-                <MaterialCommunityIcons
-                  name="map-marker"
-                  size={24}
-                  color="#DC2626"
-                  style={styles.branchIcon}
-                />
                 <View style={styles.branchInfo}>
                   <ThemedText
                     type="defaultSemiBold"
@@ -375,7 +349,7 @@ export default function Dashboard() {
                     lightColor="#666"
                     darkColor="#999"
                   >
-                    123 Main Street, Downtown
+                    McArthur Highway cor. A. Pablo Street
                   </ThemedText>
                 </View>
                 <MaterialCommunityIcons
@@ -400,21 +374,26 @@ export default function Dashboard() {
                 type="defaultSemiBold"
                 style={styles.announcementTitle}
               >
-                New Digital Collection Available
+                Happy World Read Aloud Day!📖
               </ThemedText>
               <ThemedText
                 style={styles.announcementDate}
                 lightColor="#666"
                 darkColor="#999"
               >
-                2024-02-09
+                02-11-2026
               </ThemedText>
               <ThemedText
                 style={styles.announcementText}
                 lightColor="#666"
                 darkColor="#999"
               >
-                We're excited to announce our latest digital collection launch. Visit our website for more details.
+                Sa pagdiriwang ng World Read Aloud Day ngayong buwan ng Pebrero, 
+                masayang nakibahagi ang Valenzuela City Library kasama ang mga 
+                mag-aaral mula sa Antonio M. Serapio Elementary School. 
+                Sabay-sabay nilang binasa ang kuwentong “𝗔𝗻𝗴 𝗧𝗮𝗹𝗶𝗻𝗴 𝗛𝗶𝗻𝗱𝗶 𝗠𝗮𝗶𝘁𝗮𝗹𝗶” 
+                na isinulat ni Mikhaila Avendaño at iginuhit ni Angeline Alipio. 
+
               </ThemedText>
             </View>
           </InfoCard>
@@ -427,14 +406,14 @@ export default function Dashboard() {
           </ThemedText>
 
           <View style={styles.servicesGrid}>
-            <ServiceButton icon="book-multiple" label="Book Borrowing" color="#007AFF" />
+            <ServiceButton icon="book-multiple" label="Book Borrowing" color="#56CBF9" />
             <ServiceButton
               icon="laptop"
               label="Public Computers & Free Wi-Fi"
-              color="#10B981"
+              color="#56CBF9"
             />
-            <ServiceButton icon="calendar" label="Study Spaces" color="#9333EA" />
-            <ServiceButton icon="help-circle" label="Library Assistance" color="#06B6D4" />
+            <ServiceButton icon="calendar" label="Study Spaces" color="#56CBF9" />
+            <ServiceButton icon="help-circle" label="Library Assistance" color="#56CBF9" />
           </View>
         </View>
 
@@ -446,11 +425,11 @@ export default function Dashboard() {
 
           <View style={styles.contactContainer}>
             {/* Phone Support */}
-            <View style={[styles.contactItem, { borderLeftColor: '#F59E0B' }]}>
+            <View style={[styles.contactItem, { borderLeftColor: '#00104A' }]}>
               <MaterialCommunityIcons
                 name="phone"
                 size={24}
-                color="#F59E0B"
+                color="#00104A"
                 style={styles.contactIcon}
               />
               <View style={styles.contactContent}>
@@ -476,11 +455,11 @@ export default function Dashboard() {
             </View>
 
             {/* Email Support */}
-            <View style={[styles.contactItem, { borderLeftColor: '#EC4899', marginTop: 16 }]}>
+            <View style={[styles.contactItem, { borderLeftColor: '#00104A', marginTop: 16 }]}>
               <MaterialCommunityIcons
                 name="email-outline"
                 size={24}
-                color="#EC4899"
+                color="#00104A"
                 style={styles.contactIcon}
               />
               <View style={styles.contactContent}>
@@ -510,9 +489,10 @@ export default function Dashboard() {
         {/* Bottom padding for scrollable view */}
         <View style={{ height: 120 }} />
       </ScrollView>
+
       {/* Sticky Navigation */}
       <Navigation activeTab="home" />
-    </ThemedView>
+    </View>
   );
 }
 
@@ -532,51 +512,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-
-  /* Header Styles */
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginTop: 50,
-    paddingHorizontal: 16,
-    paddingVertical: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  appName: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 14,
-    fontWeight: '400',
-  },
-  logo: {
-    width: 100,
-    height: 60,
-  },
-  notificationBadge: {
-    position: 'relative',
-    marginTop: 10,
-    marginRight: 8,
-  },
-  badge: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#DC2626',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: '600',
   },
 
   /* Section Styles */

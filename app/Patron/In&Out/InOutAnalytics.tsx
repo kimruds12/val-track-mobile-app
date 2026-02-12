@@ -6,7 +6,6 @@
  * usage analytics including daily check-ins and weekly user activity.
  * 
  * Features:
- * - Sticky header with status indicator
  * - Large action buttons for check in/out
  * - QR token display with expiration timer
  * - Regenerate QR code functionality
@@ -19,17 +18,16 @@
  */
 
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from 'react';
-import { Alert, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import OverallHeader from "../AllHeader/OverallHeader";
 import Navigation from '../Library Visitor/Navigation';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
 const { width } = Dimensions.get('window');
-const valtrackLogo = require('../../assets/images/valtrackLogo.png');
 
 /**
  * StatusIndicator Component
@@ -41,7 +39,7 @@ function StatusIndicator({ label, isActive }: { label: string; isActive: boolean
       <View
         style={[
           styles.statusDot,
-          { backgroundColor: isActive ? '#DC2626' : '#10B981' },
+          { backgroundColor: isActive ? '#FF2B2B' : '#10B981' },
         ]}
       />
       <ThemedText type="defaultSemiBold" style={styles.statusText}>
@@ -69,7 +67,7 @@ function ActionButton({
   variant?: 'primary' | 'danger';
   isDisabled?: boolean;
 }) {
-  const backgroundColor = variant === 'danger' ? '#EF4444' : '#10B981';
+  const backgroundColor = variant === 'danger' ? '#FF2B2B' : '#10B981';
 
   return (
     <TouchableOpacity
@@ -121,7 +119,7 @@ function QRCard() {
     <View style={styles.qrCard}>
       {/* QR Header */}
       <View style={styles.qrHeader}>
-        <MaterialCommunityIcons name="qrcode" size={24} color="#007AFF" />
+        <MaterialCommunityIcons name="qrcode" size={24} color="#00104A" />
         <ThemedText type="defaultSemiBold" style={styles.qrTitle}>
           QR Token
         </ThemedText>
@@ -231,7 +229,7 @@ function DailyCheckInsChart() {
     <View style={styles.analyticsCard}>
       {/* Section Header */}
       <View style={styles.analyticsHeader}>
-        <MaterialCommunityIcons name="chart-line" size={24} color="#007AFF" />
+        <MaterialCommunityIcons name="chart-line" size={24} color="#00104A" />
         <ThemedText type="defaultSemiBold" style={styles.analyticsTitle}>
           Daily Check-Ins
         </ThemedText>
@@ -328,7 +326,7 @@ function WeeklyActiveUsersChart() {
     <View style={styles.analyticsCard}>
       {/* Section Header */}
       <View style={styles.analyticsHeader}>
-        <MaterialCommunityIcons name="account-multiple" size={24} color="#9333EA" />
+        <MaterialCommunityIcons name="account-multiple" size={24} color="#56CBF9" />
         <ThemedText type="defaultSemiBold" style={styles.analyticsTitle}>
           Weekly Active Users
         </ThemedText>
@@ -383,10 +381,9 @@ function WeeklyActiveUsersChart() {
 /**
  * Main InOutAnalytics Component
  */
-export default function InOutAnalytics() {
+export default function CheckInScreen() {
   const [isCheckedOut, setIsCheckedOut] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const textColor = useThemeColor({}, 'text');
 
   /**
    * Handle check in action with confirmation
@@ -447,29 +444,10 @@ export default function InOutAnalytics() {
   };
 
   return (
-    <ThemedView style={styles.container}>
-      {/* Sticky Header */}
-      <View style={styles.header}>
-        <View>
-          <Image source={valtrackLogo} style={styles.logo} resizeMode="contain" />
-        </View>
-        <View style={styles.notificationBadge}>
-          <MaterialCommunityIcons
-            name="bell"
-            size={24}
-            color={textColor}
-          />
-          <View style={styles.badge}>
-            <ThemedText
-              style={styles.badgeText}
-              lightColor="#fff"
-              darkColor="#fff"
-            >
-              3
-            </ThemedText>
-          </View>
-        </View>
-      </View>
+    <View style={styles.container}>
+      <StatusBar style="dark" />
+      {/* Use consistent OverallHeader */}
+      <OverallHeader />
 
       {/* Status Indicator */}
       <View style={styles.statusSection}>
@@ -525,7 +503,7 @@ export default function InOutAnalytics() {
 
       {/* Sticky Navigation */}
       <Navigation activeTab="inout" />
-    </ThemedView>
+    </View>
   );
 }
 
@@ -546,51 +524,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-
-  /* Header Styles */
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginTop: 50,
-    paddingHorizontal: 16,
-    paddingVertical: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  appName: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 14,
-    fontWeight: '400',
-  },
-  logo: {
-    width: 100,
-    height: 60,
-  },
-  notificationBadge: {
-    position: 'relative',
-    marginTop: 10,
-    marginRight: 8,
-  },
-  badge: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#DC2626',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: '600',
   },
 
   /* Status Indicator */
@@ -706,7 +639,7 @@ const styles = StyleSheet.create({
   qrBlock: {
     width: '35%',
     height: '35%',
-    backgroundColor: '#007AFF',
+    backgroundColor: '#00104A',
     borderRadius: 2,
   },
   qrTokenId: {
@@ -728,7 +661,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   generateButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#00104A',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -736,7 +669,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     gap: 8,
-    shadowColor: '#007AFF',
+    shadowColor: '#00104A',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -800,7 +733,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#00104A',
   },
   xAxisLabels: {
     flexDirection: 'row',
@@ -844,33 +777,10 @@ const styles = StyleSheet.create({
   },
   bar: {
     width: '100%',
-    backgroundColor: '#9333EA',
+    backgroundColor: '#56CBF9',
     borderRadius: 6,
   },
   barLabel: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
-
-  /* Bottom Navigation */
-  bottomNavigation: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#e5e5e5',
-    backgroundColor: '#fff',
-    paddingBottom: 8,
-    paddingTop: 8,
-  },
-  navItem: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 8,
-    gap: 4,
-  },
-  navLabel: {
     fontSize: 12,
     fontWeight: '500',
   },

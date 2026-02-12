@@ -28,7 +28,7 @@ import {
 const { width, height } = Dimensions.get('window');
 
 // Logo image (use require for RN bundler)
-const valtrackLogo = require('../../assets/images/valtrackLogo.png');
+const valtrackLogo = require('../../assets/images/valtrackLogo2.png');
 
 interface OverallHeaderProps {
   notificationCount?: number;
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: width * 0.06,
-    paddingVertical: height * 0.015,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
@@ -106,18 +106,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+    marginLeft: -15, 
   },
 
   logo: {
-    width: width * 0.18,
-    height: width * 0.18,
+    width: 100,
+    height: 60,
+    marginTop: 30,
   },
 
   // Notification Section
   notificationButton: {
     position: 'relative',
-    padding: 8,
-    paddingRight: 0,
+    paddingTop: 20,
+    paddingRight: 5,
   },
 
   notificationBadge: {
@@ -130,6 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ef4444',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 40,
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
